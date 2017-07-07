@@ -70,7 +70,6 @@ Function Get-NessusScan
 			if (($count -eq $($Scans.count)) -and ($exitFlag -eq $True))
 			{
 				Write-Host "Script cannot be completed. Please wait for all scans to complete and re-execute.`n" -ForegroundColor "Yellow"
-				PauseForInput
 				exit
 			}
 		}# end checking if scans are completed.
@@ -116,7 +115,7 @@ Function Get-NessusScan
 			#once download status is equal to ready, 	RESTful API request to Nessus download csv to correct directory in out-file param
 			if ($($CsvDownloadStatus.status) -eq 'ready')
 			{
-				$CsvDownload = Invoke-RestMethod -Method "Get" -URI "https://$($server):8834/scans/$($scan.id)/export/$($CsvExport.file)/download"  -Headers @{'X-ApiKeys' = "accessKey=$($aKey); secretKey=$($sKey)"} -OutFile "$SinProgISS\Scan Saves\$group\$majcom\$($scan.name).csv"
+				$CsvDownload = Invoke-RestMethod -Method "Get" -URI "https://$($server):8834/scans/$($scan.id)/export/$($CsvExport.file)/download"  -Headers @{'X-ApiKeys' = "accessKey=$($aKey); secretKey=$($sKey)"} -OutFile "$SinProgISS\Scan Saves\$group\$($scan.name).csv"
 			}
 			#if scan info contains any lows/meds/highs, RESTful API request to Nessus to download PDF.
 			if (($($scanInfo.hosts.low) -gt 0) -or ($($scanInfo.hosts.medium) -gt 0) -or ($($scanInfo.hosts.high) -gt 0))
@@ -141,7 +140,7 @@ Function Get-NessusScan
 				#once download status is equal to ready, 	RESTful API request to Nessus download pdf to correct directory in out-file param
 				if ($($PdfDownloadStatus.status) -eq 'ready')
 				{
-					$PdfDownload = Invoke-RestMethod -Method "Get" -URI "https://$($server):8834/scans/$($scan.id)/export/$($PdfExport.file)/download"  -Headers @{'X-ApiKeys' = "accessKey=$($aKey); secretKey=$($sKey)"} -OutFile "$SinProgISS\Reports\$group\$majcom\$($scan.name).pdf"
+					$PdfDownload = Invoke-RestMethod -Method "Get" -URI "https://$($server):8834/scans/$($scan.id)/export/$($PdfExport.file)/download"  -Headers @{'X-ApiKeys' = "accessKey=$($aKey); secretKey=$($sKey)"} -OutFile "$SinProgISS\Reports\$group\$($scan.name).pdf"
 				}
 			}
 			#check to see if a MMMYYYY folder already exists in Nessus. if not, RESTful API request to Nessus to generate the folder based on user defined MMM and YYYY
